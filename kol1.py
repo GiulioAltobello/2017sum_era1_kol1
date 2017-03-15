@@ -21,3 +21,24 @@
 #
 #Delete these comments before commit!
 #Good luck.
+
+class example:
+
+	def product(a,b):
+		somm=0
+		n=len(a)
+		for i in xrange(n):
+			for j in xrange(n):
+				mat=a[i][j]*b[j][i]
+				somm+=mat
+			prod.append(somm)
+		return prod
+
+	def somma(a,b):
+		for i in xrange(n):
+			for j in xrange(n):
+				mat=a[i][j]+b[i][j]
+				somma.append(mat)
+		return somma
+
+	
