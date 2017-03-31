@@ -1,44 +1,256 @@
-#Write a library that contains a class that can represent any 2𝑥2 real matrice. 
-#Include two functions to calculate the sum and product of two matrices. 
-#Next, write a program that imports this library module and use it to perform calculations.
-#Examples:
-#
-# matrix_1 = Matrix(4,5,6,7)
-# matrix_2 = Matrix(2,2,2,1)
-#
-# matrix_3 = matrix_2.add(matrix_1)
-#
-#Try to expand your implementation as best as you can. 
-#Think of as many features as you can, and try implementing them.
-#(If you want you can expand implementation to NxN matrix.)
-#Make intelligent use of pythons syntactic sugar (overloading, iterators, generators, etc)
-#Most of all: CREATE GOOD, RELIABLE, READABLE CODE.
-#The goal of this task is for you to SHOW YOUR BEST python programming skills.
-#Impress everyone with your skills, show off with your code.
-#
-#When you are done upload this code to your github repository. 
-#The whole repository MUST be a fork from https://github.com/mwmajew/2017sum_era1_kol1
-#
-#Delete these comments before commit!
-#Good luck.
 
-class example:
+class matrix:
+    def __init__(self, mat):
+        self.mat = mat
+        self.current=0
+        
+    def __str__(self):
+        s = ''
+        for x in range(len(self.mat)):
+            for y in range(len(self.mat[0])):
+                s += str(self.mat[x][y]) + ' '
+            s += '\n'
+        return s
+    
+    def __iter__(self):
+        return self
 
-	def product(a,b):
-		somm=0
-		n=len(a)
-		for i in xrange(n):
-			for j in xrange(n):
-				mat=a[i][j]*b[j][i]
-				somm+=mat
-			prod.append(somm)
-		return prod
+    def next(self):
+        if self.current >= len(self.mat):
+            raise StopIteration
+        else:
+            self.current += 1
+            return self.mat[self.current-1]
 
-	def somma(a,b):
-		for i in xrange(n):
-			for j in xrange(n):
-				mat=a[i][j]+b[i][j]
-				somma.append(mat)
-		return somma
+    
+    def __add__(self, other):
+        result = matrix([[0 for i in range(len(self.mat[0]))]for j in range(len(self.mat))])
+        if(type(other) == type(self)):
+            if((len(self.mat) == len(other.mat)) and (len(self.mat[0]) == len(other.mat[0]))):
+                for i in range(len(self.mat)):
+                    for j in range(len(self.mat[i])):
+                        result.mat[i][j] = self.mat[i][j] + other.mat[i][j]
+            else:
+                print 'Error: the matrix must have the same size'
+                result = None
+        elif (type(other) ==int or type(other) ==float):
+            for i in range(len(self.mat)):
+                for j in range(len(self.mat[i])):
+                    result.mat[i][j] = self.mat[i][j] + other
+        else:
+            print 'Error: the argument must be class matrix or int or float'
+            print type(other)
+            result = None
+        return result
+    
+    def __sub__(self, other):
+        result = matrix([[0 for i in range(len(self.mat[0]))]for j in range(len(self.mat))])
+        if(type(other) == type(self)):
+            if((len(self.mat) == len(other.mat)) and (len(self.mat[0]) == len(other.mat[0]))):
+                for i in range(len(self.mat)):
+                    for j in range(len(self.mat[i])):
+                        result.mat[i][j] = self.mat[i][j] - other.mat[i][j]
+            else:
+                print 'Error: the matrix must have the same size'
+                result = None
+        elif (type(other) == int or type(other) == float):
+            for i in range(len(self.mat)):
+                for j in range(len(self.mat[i])):
+                    result.mat[i][j] = self.mat[i][j] - other
+        else:
+            print 'Error: the argument must be class matrix or int or float'
+            result = None
+        return result
+    
+    def __radd__(self,other):
+        if (type(other) == int or type(other) == float):
+            result = matrix([[0 for i in range(len(self.mat[0]))]for j in range(len(self.mat))])
+            for i in range(len(self.mat)):
+                for j in range(len(self.mat[i])):
+                    result.mat[i][j] = self.mat[i][j] + other
+        else:
+            print 'Error: the argument must be class int or float'
+            result = None
+        return result
+    
+    def __rsub__(self,other):
+        if (type(other) == int or type(other) == float):
+            result = matrix([[0 for i in range(len(self.mat[0]))]for j in range(len(self.mat))])
+            for i in range(len(self.mat)):
+                for j in range(len(self.mat[i])):
+                    result.mat[i][j] = other - self.mat[i][j]
+        else:
+            print 'Error: the argument must be int or float'
+            result = None
+        return result
+        
+    def prod(self,mat_prod):
+        if(type(mat_prod) == type(self)):
+            row_per_column = 0
+            if(len(self.mat[0]) == len(mat_prod.mat)):
+                result = matrix([[0 for i in range(len(mat_prod.mat[0]))]for j in range(len(self.mat))])
+                for i in range(len(self.mat)):
+                    for j in range(len(mat_prod.mat[i])):
+                        for h in range(len(self.mat[i])):
+                            row_per_column += self.mat[i][h] * mat_prod.mat[h][j]
+                        result.mat[i][j] = row_per_column
+                        row_per_column = 0
+            else:
+                print 'error: the matrix must have the same size of the dimension n: m x n * n x p'
+                result = None
+        else:
+            print 'Error: the argument must be class matrix'
+            result = None
+        return result
 
-	
+#1. pep8, https://www.python.org/dev/peps/pep-0008/ – your improved task must comply with pep8
+
+#2. constructor
+m1 = matrix([[1,1,1],[1,1,1],[1,1,1]])
+m2 = matrix([[1,2,3],[1,2,3],[1,2,3]])
+print '2. constructor:'
+print 'matrix1'
+print m1
+print 'matrix2'
+print m2
+
+#2. constructor:
+# matrix1
+# 1 1 1 
+# 1 1 1 
+# 1 1 1 
+#
+# matrix2
+# 1 2 3 
+# 1 2 3 
+# 1 2 3 
+
+#3. add two matrices
+print '3. add two matrices:'
+m3 = m1 + m2
+print m3
+
+#3. add two matrices:
+# 2 3 4 
+# 2 3 4 
+# 2 3 4 
+
+#4. add scalar to matrix
+print '4. add scalar to matrix:'
+m3 = m1 + 5 
+print m3
+
+#4. add scalar to matrix:
+# 6 6 6 
+# 6 6 6 
+# 6 6 6 
+
+#5. add matrix to scalar
+print '5. add matrix to scalar:'
+m3 = 5 + m1
+print m3
+
+#5. add matrix to scalar:
+# 6 6 6 
+# 6 6 6 
+# 6 6 6 
+
+#6. subtraction
+print '6. subtraction:'
+m3 = m1 - m2
+print 'sub two matrices:'
+print m3
+print 'sub scalar to matrix:'
+m3 = m1 - 5
+print m3
+print 'sub matrix to scalar:'
+m3 = 5 - m1
+print m3
+
+#6. subtraction:
+# sub two matrices:
+# 0 -1 -2 
+# 0 -1 -2 
+# 0 -1 -2 
+#
+# sub scalar to matrix:
+# -4 -4 -4 
+# -4 -4 -4 
+# -4 -4 -4 
+#
+# sub matrix to scalar:
+# 4 4 4 
+# 4 4 4 
+# 4 4 4 
+
+#7. product of two matrices 
+print '7. product of two matrices:'
+m3=m1.prod(m2)
+print m3
+
+#7. product of two matrices:
+# 3 6 9 
+# 3 6 9 
+# 3 6 9 
+
+#8. Matrix iterable
+print '8. matrix iterable'
+for v in m1:
+    print v
+
+#8. matrix iterable
+# [1, 1, 1]
+# [1, 1, 1]
+# [1, 1, 1]
+
+#9. Make some lines that will show me that the changes above have been applied
+
+#6. subtraction
+print '6. subtraction:'
+m3 = m1 - m2
+print 'sub two matrices:'
+print m3
+print 'sub scalar to matrix:'
+m3 = m1 - 5
+print m3
+print 'sub matrix to scalar:'
+m3 = 5 - m1
+print m3
+
+#6. subtraction:
+# sub two matrices:
+# 0 -1 -2 
+# 0 -1 -2 
+# 0 -1 -2 
+#
+# sub scalar to matrix:
+# -4 -4 -4 
+# -4 -4 -4 
+# -4 -4 -4 
+#
+# sub matrix to scalar:
+# 4 4 4 
+# 4 4 4 
+# 4 4 4 
+
+#7. product of two matrices 
+print '7. product of two matrices:'
+m3=m1.prod(m2)
+print m3
+
+#7. product of two matrices:
+# 3 6 9 
+# 3 6 9 
+# 3 6 9 
+
+#8. Matrix iterable
+print '8. matrix iterable'
+for v in m1:
+    print v
+
+#8. matrix iterable
+# [1, 1, 1]
+# [1, 1, 1]
+# [1, 1, 1]
+
+#9. Make some lines that will show me that the changes above have been applied
